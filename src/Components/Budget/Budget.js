@@ -8,8 +8,13 @@ import Loading from './../shared/Loading/Loading'
 import Nav from './../shared/Nav'
 import './Budget.css'
 import { connect } from 'react-redux'
-import { requestUserData } from './../../redux/userReducer.js'
-import { requestBudgetData } from './../../redux/budgetReducer.js'
+import { requestUserData } from './../../redux/userReducer'
+//IMPORT THE addPurchase AND removePurchase ACTION CREATORS
+import {
+  requestBudgetData,
+  addPurchase,
+  removePurchase,
+} from './../../redux/budgetReducer'
 
 class Budget extends Component {
   componentDidMount() {
@@ -27,8 +32,12 @@ class Budget extends Component {
           <Nav firstName={firstName} lastName={lastName} />
           <div className="content-container">
             <div className="purchases-container">
-              <AddPurchase />
-              <DisplayPurchases purchases={purchases} />
+              // USE PROPS TO PASS DOWN addPurchase AND removePurchase FUNCTIONS
+              <AddPurchase addPurchase={this.props.addPurchase} />
+              <DisplayPurchases
+                purchases={purchases}
+                removePurchase={this.props.removePurchase}
+              />
             </div>
             <div className="chart-container">
               <Chart1 purchases={purchases} budgetLimit={budgetLimit} />
@@ -48,6 +57,10 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { requestUserData, requestBudgetData })(
-  Budget
-)
+// ADD addPurchase AND removePurchase TO THE 2ND OBJ ARG IN THE CONNECT METHOD
+export default connect(mapStateToProps, {
+  requestUserData,
+  requestBudgetData,
+  addPurchase,
+  removePurchase,
+})(Budget)
